@@ -1,0 +1,11 @@
+To use the script convert2geojson, first install TrollBUFR and download
+the BUFR table archive.
+
+    pip install --user trollbufr
+
+    cd $HOME/.local/share
+    curl https://opendata.dwd.de/weather/lib/bufr/bufrtables_libdwd.tar.bz2 | tar -xj
+
+Set environtment variables:
+
+    export BUFR_TABLES_TYPE=libdwd ; export BUFR_TABLES=$PWD/DWD-bufrtables/tabellen_v3
