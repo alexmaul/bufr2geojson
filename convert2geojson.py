@@ -136,20 +136,24 @@ def runner(args):
                                 continue
                             if descr_entry.descr in station_descr and descr_entry.value is not None:
                                 station_accepted = True
-                            d_name, d_unit, d_typ = tabl.lookup_elem(descr_entry.descr)
-                            if d_unit in ("CCITT IA5", "Numeric", "Code table", "Flag table"):
+                            # d_name, d_unit, d_typ
+                            d_info = tabl.lookup_elem(descr_entry.descr)
+                            if d_info.unit.upper() in ("CCITT IA5", "NUMERIC", "CODE TABLE", "FLAG TABLE"):
                                 d_unit = None
-                            if descr_entry.value is None or d_typ in (TabBType.NUMERIC, TabBType.LONG, TabBType.DOUBLE):
+                            else:
+                                d_unit = d_info.unit
+                            if descr_entry.value is None or d_info.type in (TabBType.NUMERIC, TabBType.LONG, TabBType.DOUBLE):
                                 d_value = descr_entry.value
-                            elif d_typ in (TabBType.CODE, TabBType.FLAG) and descr_entry.value is not None:
+                            elif d_info.type in (TabBType.CODE, TabBType.FLAG) and descr_entry.value is not None:
                                 d_value = tabl.lookup_codeflag(descr_entry.descr,
                                                                descr_entry.value)
                             else:
                                 d_value = str(descr_entry.value).decode("latin1")
-                            if d_unit is None:
-                                feature_properties["data_%03d" % (j)] = {"name": d_name, "value": d_value}
-                            else:
-                                feature_properties["data_%03d" % (j)] = {"name": d_name, "value": d_value, "unit": str(d_unit)}
+                            feature_properties["data_%03d" % (j)] = {"name": d_info.name, "value": d_value}
+                            if d_info.shortname is not None:
+                                feature_properties["data_%03d" % (j)]["shortname"] = d_info.shortname
+                            if d_unit is not None:
+                                feature_properties["data_%03d" % (j)]["unit"] = str(d_unit)
                             j += 1
                     except Exception as e:
                         station_accepted = False
