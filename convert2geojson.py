@@ -4,6 +4,8 @@
 Read file given at command-line and convert all contained BUFR messages to
 GeoJSON format.
 
+(C) 2019 DWD/amaul
+
 GeoJSON structure
 -----------------
 All feature properties representing a descriptor value are named with the
