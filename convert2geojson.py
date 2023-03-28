@@ -4,6 +4,8 @@
 Read file given at command-line and convert all contained BUFR messages to
 GeoJSON format.
 
+(C) 2019 DWD/amaul
+
 GeoJSON structure
 -----------------
 All feature properties representing a descriptor value are named with the
@@ -81,7 +83,7 @@ def parse_args():
             loglevel = logging.INFO
         elif args.verbose >= 2:
             loglevel = logging.DEBUG
-            log_formater_line = "[%(asctime)s %(levelname)s %(module)s:%(lineno)d] %(message)s".format
+            log_formater_line = f"[%(asctime)s %(levelname)s %(module)s:%(lineno)d] %(message)s"
     handler = logging.StreamHandler()
     handler.setFormatter(logging.Formatter(log_formater_line, "%Y-%m-%d %H:%M:%S"))
     handler.setLevel(loglevel)
@@ -148,7 +150,7 @@ def runner(args):
                                 d_value = tabl.lookup_codeflag(descr_entry.descr,
                                                                descr_entry.value)
                             else:
-                                d_value = str(descr_entry.value).decode("latin1")
+                                d_value = str(descr_entry.value) # .decode("latin1")
                             feature_properties["data_%03d" % (j)] = {"name": d_info.name, "value": d_value}
                             if d_info.shortname is not None:
                                 feature_properties["data_%03d" % (j)]["shortname"] = d_info.shortname
